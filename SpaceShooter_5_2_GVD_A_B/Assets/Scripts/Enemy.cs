@@ -23,8 +23,32 @@ public class Enemy : MonoBehaviour
         {
             //Vector3 teleport = new Vector3(transform.position.x,7.5f,0)
             //transform.position = teleport
-            transform.position = new Vector3(transform.position.x,7.5f,0);
+            float randomX = Random.Range(-9.2f,9.2f);
+            transform.position = new Vector3(randomX,7.5f,0);
         }
         //change the position to teleport from the top of the screen from 7.5f on the y axis
+    }
+
+    void OnTriggerEnter(Collider other) 
+    {
+        //Debug.Log("Hit: " + other.transform.name);
+        if(other.tag == "Laser")
+        {
+            //Destroy the laser
+            Destroy(other.gameObject);
+            //Destroy the enemy
+            Destroy(this.gameObject);
+        }
+        if(other.tag == "Player")
+        {
+            //Damage the player
+            Player player = other.GetComponent<Player>();
+            if(player != null)
+            {
+                player.Damage();
+            }
+            //Destroy the enemy
+            Destroy(this.gameObject);
+        }
     }
 }
