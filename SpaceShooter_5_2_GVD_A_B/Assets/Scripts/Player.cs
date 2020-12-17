@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
     [SerializeField]
-    private int _lives = 3;    
+    private int _lives = 3;
+    private SpawnManager _spawnManager;    
     
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,14 @@ public class Player : MonoBehaviour
         //take the current position of the player = position (0,0,0) (x,y,z)
         //Vector3(x,y,z) in our case Vector3(0,0,0)
         transform.position = new Vector3(0,0,0);
+        //store the spawn manager inside the variable. In order to find the spawn we can use the name of the object.
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        //check if the SpawnManager is empty
+        if(_spawnManager == null)
+        {
+            //if its empty then show the below error
+            Debug.LogError("The Spawn Manager is null");
+        }
     }
 
     // Update is called once per frame
@@ -104,6 +113,7 @@ public class Player : MonoBehaviour
 
         if(_lives < 1)
         {
+            _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         } 
     }
