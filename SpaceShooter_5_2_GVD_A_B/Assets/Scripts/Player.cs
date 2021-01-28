@@ -27,6 +27,9 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _shieldVisualizer;
+    [SerializeField]
+    private int _score;
+    private UIManager _uiManager;
 
 
     
@@ -38,11 +41,16 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0,0,0);
         //store the spawn manager inside the variable. In order to find the spawn we can use the name of the object.
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         //check if the SpawnManager is empty
         if(_spawnManager == null)
         {
             //if its empty then show the below error
             Debug.LogError("The Spawn Manager is null");
+        }
+        if(_uiManager == null)
+        {
+            Debug.LogError("The UIManager is null");
         }
     }
 
@@ -138,6 +146,7 @@ public class Player : MonoBehaviour
         //_lives = _lives - 1
         //_lives--;
         _lives-= 1;
+        _uiManager.UpdateLives(_lives);
 
         if(_lives < 1)
         {
@@ -179,6 +188,12 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
         _speed /= _speedMultiplier;
         _isSpeedBoostActive = false;
+    }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 
 }
